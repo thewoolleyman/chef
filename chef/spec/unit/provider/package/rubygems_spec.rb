@@ -46,16 +46,24 @@ describe Chef::Provider::Package::Rubygems do
   end
 
   describe "determining the candidate version" do
-    it "parses the available versions as reported by rubygems 1.3.6 and lower" do
-      gem_list = "nokogiri (1.4.1)\nnokogiri-happymapper (0.3.3)"
-      @provider.gem_list_parse(gem_list).should == ['1.4.1']
+    describe "under rubygems 1.3.6 and lower" do
+      it "parses the available versions" do
+        gem_list = "nokogiri (1.4.1)\nnokogiri-happymapper (0.3.3)"
+        @provider.gem_list_parse(gem_list).should == ['1.4.1']
+      end
     end
 
-    it "parses the available versions as reported by rubygems 1.3.7 and newer" do
-      gem_list = "nokogiri (1.4.1 ruby java x86-mingw32 x86-mswin32)\nnokogiri-happymapper (0.3.3)\n"
-      @provider.gem_list_parse(gem_list).should == ['1.4.1']
-    end
+    describe "under rubygems 1.3.7 and higher" do
+      it "parses the available versions with multiple name matches" do
+        gem_list = "nokogiri (1.4.1 ruby java x86-mingw32 x86-mswin32)\nnokogiri-happymapper (0.3.3)\n"
+        @provider.gem_list_parse(gem_list).should == ['1.4.1']
+      end
 
+      it "parses the available versions with multiple versions having platforms" do
+        gem_list = "nokogiri (5 ruby x86-mingw32 x86-mswin32, 4 mswin32, 3 mswin32, 2, 1)\n"
+        @provider.gem_list_parse(gem_list).should == ["5", "4", "3", "2", "1"]
+      end
+    end
   end
 
   describe "when installing a gem" do

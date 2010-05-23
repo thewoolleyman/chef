@@ -27,8 +27,13 @@ class Chef
       
         def gem_list_parse(line)
           installed_versions = Array.new
-          if md = line.match(/^#{@new_resource.package_name} \((.+?)(?: [^\)\.]+)?\)$/)
-            md.captures.first.split(/, /)
+          if version_and_platforms_match_data = line.match(/^#{@new_resource.package_name} \((.+?)\)$/)
+            version_and_platforms_string = version_and_platforms_match_data.captures.first
+            versions_and_platforms = version_and_platforms_string.split(/, /)
+            versions_and_platforms.map do |version_and_platforms|
+              version = version_and_platforms.split(' ').first
+              version
+            end
           else
             nil
           end
