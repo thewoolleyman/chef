@@ -59,7 +59,7 @@ describe Chef::Handler::JsonFile do
 
     it "should save the report to a file" do
       Time.stub!(:now).and_return(Time.at(0))
-      File.should_receive(:open).with("/var/chef/reports/chef-run-report-19691231160000.json", "w").and_yield(@file_mock)
+      File.should_receive(:open).with(/var\/chef\/reports\/chef-run-report-.*\.json/, "w").and_yield(@file_mock)
       report = @handler.report(@node, @runner, @start_time, @end_time, @elapsed_time, @exception)
     end
   end
