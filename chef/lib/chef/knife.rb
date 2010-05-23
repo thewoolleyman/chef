@@ -126,7 +126,7 @@ class Chef
       Chef::Log.level(Chef::Config[:log_level])
 
       if Chef::Config[:node_name].nil?
-        raise ArgumentError, "No user specified, pass via -u or specifiy 'node_name' in #{config[:config_file] ? config[:config_file] : "~/.chef/knife.rb"}"
+        raise ArgumentError, "No user specified, pass via -u or specify 'Chef::Config[:node_name]' in #{config[:config_file] ? config[:config_file] : "~/.chef/knife.rb"}"
       end
     end
 
